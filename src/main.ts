@@ -12,7 +12,7 @@ import { createHead, useHead } from '@unhead/vue'
 
 const head = createHead()
 useHead({
-  title: '主页',
+  title: '主站',
   titleTemplate: '%s - MC百科',
   meta: [
     {

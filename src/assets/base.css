@@ -23,6 +23,9 @@
 
 /* semantic color variables for this project */
 :root {
+  --mcmod-c-white: #eeeeee;
+  --mcmod-c-black: #3d454c;
+
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
   --color-background-mute: var(--vt-c-white-mute);
@@ -61,7 +64,7 @@
 body {
   min-height: 100vh;
   color: var(--color-text);
-  background: var(--color-background);
+  background: var(--mcmod-c-black);
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -70,6 +73,8 @@ body {
     Inter,
     -apple-system,
     BlinkMacSystemFont,
+    'Microsoft YaHei',
+    'Microsoft JhengHei',
     'Segoe UI',
     Roboto,
     Oxygen,

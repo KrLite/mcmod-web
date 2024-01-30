@@ -11,7 +11,32 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue')
+      component: () => import('@/views/HomeView.vue')
+    },
+    {
+      path: '/bbs',
+      name: 'bbs',
+      component: () => import('@/views/BBSView.vue')
+    },
+    {
+      path: '/server',
+      name: 'server',
+      component: () => import('@/views/ServerView.vue')
+    },
+    {
+      path: '/modpack',
+      name: 'modpack',
+      component: () => import('@/views/ModpackView.vue')
+    },
+    {
+      path: '/utility',
+      name: 'utility',
+      component: () => import('@/views/UtilityView.vue')
+    },
+    {
+      path: '/feature',
+      name: 'feature',
+      component: () => import('@/views/FeatureView.vue')
     }
   ]
 })
