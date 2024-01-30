@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import LogoComponent from '@/components/logo/LogoComponent.vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
+// Fields
 const navs = [
   { path: '/', name: '主站' },
   { path: '/bbs', name: '社群' },
@@ -10,21 +12,53 @@ const navs = [
   { path: '/utility', name: '实用工具' },
   { path: '/feature', name: '特性' }
 ]
+const mediaQueryMobile = window.matchMedia('(max-width: 768px)')
+
+// Refs
+const onMobile = ref(mediaQueryMobile.matches)
+const navExpanded = ref(!onMobile.value)
+
+// Hooks
+function updateScreenWidth(event: UIEvent) {
+  const wasOnMobile = onMobile.value
+  onMobile.value = mediaQueryMobile.matches
+  if (onMobile.value === false) navExpanded.value = true
+  else if (wasOnMobile === false) navExpanded.value = false
+}
+onMounted(() => window.addEventListener('resize', updateScreenWidth))
+onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 </script>
 
 <template>
   <div class="background"></div>
 
-  <header>
-    <a class="grid-logo" href="/"><LogoComponent class="logo"></LogoComponent></a>
-    <div class="grid-nav">
-      <div class="nav" v-for="nav in navs" :key="nav.path">
-        <RouterLink :to="nav.path">
-          <p>{{ nav.name }}</p>
-        </RouterLink>
+  <Transition :name="onMobile ? 'transition-vignette' : '_'">
+    <div v-if="navExpanded" class="vignette"></div>
+  </Transition>
+
+  <Transition :name="onMobile ? 'transition-mobile' : '_'">
+    <header v-if="navExpanded">
+      <a class="grid-logo" href="/"><LogoComponent class="logo"></LogoComponent></a>
+
+      <div class="grid-nav">
+        <div class="nav dummy"></div>
+        <div class="nav" v-for="nav in navs" :key="nav.path">
+          <RouterLink :to="nav.path">
+            <p>{{ nav.name }}</p>
+          </RouterLink>
+        </div>
+        <div class="nav dummy"></div>
       </div>
-    </div>
-  </header>
+
+      <div class="grid-footnote"></div>
+
+      <div v-if="onMobile" class="grid-close" @click="navExpanded = false">
+        <fa-icon class="icon" :icon="['fs', 'arrow-left']" size="2x"></fa-icon>
+      </div>
+    </header>
+
+    <header v-else class="expand" @click="navExpanded = true"></header>
+  </Transition>
 
   <RouterView />
 </template>
@@ -34,12 +68,12 @@ header {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   height: 4em;
-  max-height: 100vh;
   background: var(--mcmod-c-black);
   display: grid;
-  grid-template-columns: 8.5rem 8.5rem 1fr 8.5rem;
+  grid-template-rows: 1fr;
+  grid-template-columns: 8.5rem 1fr 8.5rem;
   box-shadow: 0 1px 5px #333;
 }
 
@@ -50,7 +84,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  grid-column: 2;
+  grid-column: 1;
+  padding-left: 2rem;
 }
 
 .grid-nav {
@@ -58,16 +93,24 @@ header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  grid-column: 3;
+  grid-column: 2;
   overflow: scroll;
 
-  --mask: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 2.5rem)
+  --mask: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 1) 1rem,
+      rgba(0, 0, 0, 1) calc(100% - 1rem),
+      rgba(0, 0, 0, 0) 100%
+    )
     100% 100% / 100% 100% repeat-y;
   mask: var(--mask);
 }
 
 .grid-footnote {
-  grid-column: 4;
+  grid-column: 3;
+  padding-right: 2rem;
+  background-color: red;
 }
 
 .logo {
@@ -81,7 +124,12 @@ header {
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0);
-  transition: background-color 0.5s ease;
+  transition: background-color 0.3s ease;
+}
+
+.nav.dummy {
+  min-width: 1rem;
+  width: 1rem;
 }
 
 .nav:has(.router-link-active) {
@@ -100,39 +148,81 @@ header {
 
 @media (max-width: 768px) {
   header {
-    height: 100%;
-    width: calc(100% - 3rem);
-    grid-template-columns: 2rem 1fr;
-    grid-template-rows: 8.5rem 1fr;
+    height: 100vh;
+    width: auto;
+    display: grid;
+    grid-template-columns: 8.5rem 1fr 8.5rem;
+    grid-template-rows: 8.5rem 1fr 5rem;
+  }
+
+  .vignette {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+	opacity: 0.25;
+  }
+
+  .expand {
+    width: 3rem;
+    height: 3rem;
+    clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
   }
 
   .grid-logo {
     grid-row: 1;
-    grid-column: 2;
+    grid-column: 1;
+  }
+
+  .grid-close {
+    grid-row: 1;
+    grid-column: 2 / 4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 2rem;
+
+    .icon {
+      color: var(--mcmod-c-white);
+    }
   }
 
   .grid-nav {
     grid-row: 2;
-    grid-column: 1 / 3;
-	flex-direction: column;
+    grid-column: 1 / 4;
+    flex-direction: column;
 
-	--mask: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 2.5rem)
-    100% 100% / 100% 100% repeat-x;
+    --mask: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 1rem,
+        rgba(0, 0, 0, 1) calc(100% - 1rem),
+        rgba(0, 0, 0, 0) 100%
+      )
+      100% 100% / 100% 100% repeat-x;
   }
 
-  .logo {
-    min-width: none;
-    width: 85%;
-    height: 3rem;
+  .grid-footnote {
+    grid-row: 3;
+    grid-column: 1 / 4;
   }
 
   .nav {
     min-width: none;
-	min-height: 6rem;
+    min-height: 5rem;
     width: 100%;
     height: auto;
     padding: 0 2rem 0 2rem;
     justify-content: flex-start;
+  }
+
+  .nav.dummy {
+    min-width: none;
+    min-height: 1rem;
+    width: 100%;
+    height: 1rem;
   }
 
   .nav a {
@@ -148,5 +238,26 @@ header {
   height: 100%;
   background-color: var(--color-background);
   transition: all 0.5s ease;
+}
+
+.transition-mobile-enter-from,
+.transition-mobile-leave-to {
+  transform: translateX(-100%);
+}
+.transition-mobile-enter-active,
+.transition-mobile-leave-active {
+  transition: transform 0.3s ease;
+}
+.transition-mobile-enter-active {
+  transition-delay: 0.2s;
+}
+
+.transition-vignette-enter-from,
+.transition-vignette-leave-to {
+  opacity: 0;
+}
+.transition-vignette-enter-active,
+.transition-vignette-leave-active {
+  transition: opacity 0.3s ease;
 }
 </style>
