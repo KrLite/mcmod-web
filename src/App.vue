@@ -50,7 +50,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  grid-column: 2 / 3;
+  grid-column: 2;
 }
 
 .grid-nav {
@@ -58,16 +58,16 @@ header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  grid-column: 3 / 4;
+  grid-column: 3;
   overflow: scroll;
-  
-  --mask: linear-gradient(to right,
-  rgba(0, 0, 0, 1) calc(100% - 2.5rem), rgba(0, 0, 0, 0) 100%) 100% 100% / 100% 100% repeat-y;
+
+  --mask: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 2.5rem)
+    100% 100% / 100% 100% repeat-y;
   mask: var(--mask);
 }
 
 .grid-footnote {
-  grid-column: 4 / 5;
+  grid-column: 4;
 }
 
 .logo {
@@ -102,8 +102,22 @@ header {
   header {
     height: 100%;
     width: calc(100% - 3rem);
-    flex-direction: column;
-    padding: 2rem 0 2rem 0;
+    grid-template-columns: 2rem 1fr;
+    grid-template-rows: 8.5rem 1fr;
+  }
+
+  .grid-logo {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .grid-nav {
+    grid-row: 2;
+    grid-column: 1 / 3;
+	flex-direction: column;
+
+	--mask: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 2.5rem)
+    100% 100% / 100% 100% repeat-x;
   }
 
   .logo {
@@ -114,8 +128,9 @@ header {
 
   .nav {
     min-width: none;
+	min-height: 6rem;
     width: 100%;
-    height: 5rem;
+    height: auto;
     padding: 0 2rem 0 2rem;
     justify-content: flex-start;
   }
