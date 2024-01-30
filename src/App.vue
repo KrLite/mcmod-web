@@ -13,9 +13,11 @@ const navs = [
 </script>
 
 <template>
+  <div class="background"></div>
+
   <header>
     <a class="nav" href="/"> <LogoComponent class="logo"></LogoComponent></a>
-    <div class="nav" v-for="(nav, index) in navs" :key="nav.path">
+    <div class="nav" v-for="nav in navs" :key="nav.path">
       <RouterLink :to="nav.path">
         <p>{{ nav.name }}</p>
       </RouterLink>
@@ -53,7 +55,7 @@ header {
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0);
-  transition: background-color 0.4s ease;
+  transition: background-color 0.5s ease;
 }
 
 .nav:has(.router-link-active) {
@@ -71,29 +73,39 @@ header {
 }
 
 @media (max-width: 768px) {
-	header {
-		height: 100%;
-		width: calc(100% - 3rem);
-		flex-direction: column;
-		padding: 2rem 0 2rem 0;
-	}
+  header {
+    height: 100%;
+    width: calc(100% - 3rem);
+    flex-direction: column;
+    padding: 2rem 0 2rem 0;
+  }
 
-	.logo {
-		min-width: none;
-		width: 85%;
-		height: 3rem;
-	}
+  .logo {
+    min-width: none;
+    width: 85%;
+    height: 3rem;
+  }
 
-	.nav {
-		min-width: none;
-		width: 100%;
-		height: 5rem;
-		padding: 0 2rem 0 2rem;
-		justify-content: flex-start;
-	}
+  .nav {
+    min-width: none;
+    width: 100%;
+    height: 5rem;
+    padding: 0 2rem 0 2rem;
+    justify-content: flex-start;
+  }
 
-	.nav a {
-		font-size: 1.5rem;
-	}
+  .nav a {
+    font-size: 1.5rem;
+  }
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-background);
+  transition: all 0.5s ease;
 }
 </style>
