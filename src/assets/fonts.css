@@ -1,1 +1,14 @@
 @import url('typography/minecraft.css');
+@import url('typography/unifont.css');
+
+.font-minecraft {
+  font-family: 'Minecraft', 'Unifont';
+}
+
+.font-minecraft-ten {
+  font-family: 'Minecraft Ten';
+}
+
+.font-unifont {
+  font-family: 'Unifont';
+}
