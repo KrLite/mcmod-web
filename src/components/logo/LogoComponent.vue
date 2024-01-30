@@ -21,7 +21,7 @@ import IconWiki from './IconWiki.vue'
   display: flex;
   align-items: center;
   position: relative;
-  column-gap: 1rem;
+  column-gap: 6px;
 }
 
 .icon {

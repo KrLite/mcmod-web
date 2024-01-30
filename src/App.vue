@@ -16,11 +16,13 @@ const navs = [
   <div class="background"></div>
 
   <header>
-    <a class="nav" href="/"> <LogoComponent class="logo"></LogoComponent></a>
-    <div class="nav" v-for="nav in navs" :key="nav.path">
-      <RouterLink :to="nav.path">
-        <p>{{ nav.name }}</p>
-      </RouterLink>
+    <a class="grid-logo" href="/"><LogoComponent class="logo"></LogoComponent></a>
+    <div class="grid-nav">
+      <div class="nav" v-for="nav in navs" :key="nav.path">
+        <RouterLink :to="nav.path">
+          <p>{{ nav.name }}</p>
+        </RouterLink>
+      </div>
     </div>
   </header>
 
@@ -33,19 +35,43 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  height: 3em;
+  height: 4em;
   max-height: 100vh;
   background: var(--mcmod-c-black);
-  padding: 0 8.5rem 0 8.5rem;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: 8.5rem 8.5rem 1fr 8.5rem;
   box-shadow: 0 1px 5px #333;
 }
 
+.grid-logo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  grid-column: 2 / 3;
+}
+
+.grid-nav {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  grid-column: 3 / 4;
+  overflow: scroll;
+  
+  --mask: linear-gradient(to right,
+  rgba(0, 0, 0, 1) calc(100% - 2.5rem), rgba(0, 0, 0, 0) 100%) 100% 100% / 100% 100% repeat-y;
+  mask: var(--mask);
+}
+
+.grid-footnote {
+  grid-column: 4 / 5;
+}
+
 .logo {
-  height: 70%;
-  min-width: 7.5rem;
+  height: 2rem;
 }
 
 .nav {
