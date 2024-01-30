@@ -38,7 +38,7 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 
   <Transition :name="onMobile ? 'transition-mobile' : '_'">
     <header v-if="navExpanded">
-      <a class="grid-logo" href="/"><LogoComponent class="logo"></LogoComponent></a>
+      <a class="grid-logo dim-when-active" href="/"><LogoComponent class="logo"></LogoComponent></a>
 
       <div class="grid-nav">
         <div class="nav dummy"></div>
@@ -50,9 +50,16 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
         <div class="nav dummy"></div>
       </div>
 
-      <div class="grid-footnote"></div>
+      <div class="grid-footnote">
+        <a href="/" class="dim-when-active">
+          <fa-icon :icon="['fs', 'right-to-bracket']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
+        </a>
+        <a href="https://github.com/KrLite/Web.mcmod.cn" class="dim-when-active">
+          <fa-icon :icon="['fab', 'github']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
+        </a>
+      </div>
 
-      <div v-if="onMobile" class="grid-close" @click="navExpanded = false">
+      <div v-if="onMobile" class="grid-close dim-when-active" @click="navExpanded = false">
         <fa-icon class="icon" :icon="['fs', 'arrow-left']" size="2x"></fa-icon>
       </div>
     </header>
@@ -64,8 +71,24 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 </template>
 
 <style scoped>
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-background);
+  transition: all 0.5s ease;
+  z-index: -1;
+}
+
+.dim-when-active:active {
+	opacity: 0.5;
+	transition: opacity 0.3s ease;
+}
+
 header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
@@ -109,8 +132,16 @@ header {
 
 .grid-footnote {
   grid-column: 3;
+  padding-left: 0;
   padding-right: 2rem;
-  background-color: red;
+  display: flex;
+  flex-direction: row-reverse;
+  column-gap: 0.5rem;
+  align-items: center;
+
+  a {
+    color: var(--mcmod-color-white);
+  }
 }
 
 .logo {
@@ -120,9 +151,6 @@ header {
 .nav {
   height: 100%;
   min-width: 6rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: rgba(0, 0, 0, 0);
   transition: background-color 0.3s ease;
 }
@@ -132,13 +160,29 @@ header {
   width: 1rem;
 }
 
-.nav:has(.router-link-active) {
+.nav:not(.dummy):hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+.nav:has(.router-link-active) {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 .nav a {
-  font-size: 1rem;
-  color: var(--mcmod-c-white);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    font-size: 1rem;
+    color: var(--mcmod-c-white);
+    text-decoration: none;
+  }
+}
+
+.nav a:active {
   text-decoration: none;
 }
 
@@ -162,7 +206,7 @@ header {
     width: 100vw;
     height: 100vh;
     background-color: black;
-	opacity: 0.25;
+    opacity: 0.25;
   }
 
   .expand {
@@ -205,8 +249,12 @@ header {
   }
 
   .grid-footnote {
+    padding-left: 2rem;
+    padding-right: 0;
     grid-row: 3;
     grid-column: 1 / 4;
+    flex-direction: row;
+    column-gap: 1rem;
   }
 
   .nav {
@@ -226,18 +274,12 @@ header {
   }
 
   .nav a {
-    font-size: 1.5rem;
-  }
-}
+    justify-content: flex-start;
 
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-background);
-  transition: all 0.5s ease;
+    p {
+      font-size: 1.5rem;
+    }
+  }
 }
 
 .transition-mobile-enter-from,

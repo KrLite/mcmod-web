@@ -14,8 +14,14 @@ onMounted(() => {
 
 <template>
   <main>
+	<div class="long"></div>
   </main>
 </template>
 
 <style scoped>
+.long {
+	width: 100%;
+	height: 500vh;
+	border: 3px solid aqua;
+}
 </style>

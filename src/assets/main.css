@@ -4,7 +4,6 @@
 html, body, #app {
   min-width: 100vw;
   min-height: 100vh;
-  overscroll-behavior: none;
 }
 
 #app {
