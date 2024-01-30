@@ -30,44 +30,54 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 </script>
 
 <template>
-  <div class="background"></div>
+  <Teleport to="body">
+    <div class="background"></div>
 
-  <Transition :name="onMobile ? 'transition-vignette' : '_'">
-    <div v-if="navExpanded" class="vignette"></div>
-  </Transition>
+    <Transition :name="onMobile ? 'transition-vignette' : '_'">
+      <div v-if="navExpanded" class="vignette"></div>
+    </Transition>
 
-  <Transition :name="onMobile ? 'transition-mobile' : '_'">
-    <header v-if="navExpanded">
-      <a class="grid-logo dim-when-active" href="/"><LogoComponent class="logo"></LogoComponent></a>
+    <Transition :name="onMobile ? 'transition-mobile' : '_'">
+      <header v-if="navExpanded">
+        <a class="grid-logo dim-when-active" href="/"
+          ><LogoComponent class="logo"></LogoComponent
+        ></a>
 
-      <div class="grid-nav">
-        <div class="nav dummy"></div>
-        <div class="nav" v-for="nav in navs" :key="nav.path">
-          <RouterLink :to="nav.path">
-            <p>{{ nav.name }}</p>
-          </RouterLink>
+        <div class="grid-nav">
+          <div class="nav dummy"></div>
+          <div class="nav" v-for="nav in navs" :key="nav.path">
+            <RouterLink :to="nav.path">
+              <p>{{ nav.name }}</p>
+            </RouterLink>
+          </div>
+          <div class="nav dummy"></div>
         </div>
-        <div class="nav dummy"></div>
-      </div>
 
-      <div class="grid-footnote">
-        <a href="/" class="dim-when-active">
-          <fa-icon :icon="['fs', 'right-to-bracket']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
-        </a>
-        <a href="https://github.com/KrLite/Web.mcmod.cn" class="dim-when-active">
-          <fa-icon :icon="['fab', 'github']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
-        </a>
-      </div>
+        <div class="grid-footnote">
+          <a href="/" class="dim-when-active">
+            <fa-icon :icon="['fs', 'right-to-bracket']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
+          </a>
+          <a href="https://github.com/KrLite/Web.mcmod.cn" class="dim-when-active">
+            <fa-icon :icon="['fab', 'github']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
+          </a>
+        </div>
 
-      <div v-if="onMobile" class="grid-close dim-when-active" @click="navExpanded = false">
-        <fa-icon class="icon" :icon="['fs', 'arrow-left']" size="2x"></fa-icon>
-      </div>
-    </header>
+        <div v-if="onMobile" class="grid-close dim-when-active" @click="navExpanded = false">
+          <fa-icon class="icon" :icon="['fs', 'arrow-left']" size="2x"></fa-icon>
+        </div>
+      </header>
 
-    <header v-else class="expand" @click="navExpanded = true"></header>
-  </Transition>
+      <header v-else class="expand" @click="navExpanded = true"></header>
+    </Transition>
+  </Teleport>
 
   <RouterView />
+
+  <Teleport to="body">
+    <footer>
+      <div></div>
+    </footer>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -83,8 +93,23 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 }
 
 .dim-when-active:active {
-	opacity: 0.5;
-	transition: opacity 0.3s ease;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  height: 16rem;
+  background: var(--color-background-soft);
+  padding: 2rem 8.5rem 4rem 8.5rem;
+
+  div {
+    width: 100%;
+    height: 100%;
+    border: 3px solid yellow;
+  }
 }
 
 header {
@@ -92,7 +117,7 @@ header {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 4em;
+  height: 4rem;
   background: var(--mcmod-c-black);
   display: grid;
   grid-template-rows: 1fr;
@@ -191,6 +216,11 @@ header {
 }
 
 @media (max-width: 768px) {
+  footer {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
   header {
     height: 100vh;
     width: auto;
