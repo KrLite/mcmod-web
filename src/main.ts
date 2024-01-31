@@ -34,7 +34,8 @@ import {
 	faArrowLeft,
 	faRightToBracket,
 	faCircleUser,
-	faEnvelope
+	faEnvelope,
+	faMinus
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -46,7 +47,8 @@ library.add(
 	faRightToBracket,
 	faGithub,
 	faCircleUser,
-	faEnvelope
+	faEnvelope,
+	faMinus
 )
 app.component('fa-icon', FontAwesomeIcon)
 

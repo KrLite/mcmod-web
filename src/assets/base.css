@@ -70,6 +70,7 @@
   box-sizing: border-box;
   margin: 0;
   font-weight: normal;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -108,10 +109,10 @@ body {
 }
 
 .scrollbar-invisible {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .scrollbar-invisible::-webkit-scrollbar {
-	display: none;
+  display: none;
 }

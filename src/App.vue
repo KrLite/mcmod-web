@@ -64,7 +64,7 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
       <div v-if="navExpanded" class="vignette" @click="navExpanded = false"></div>
     </Transition>
 
-    <Transition :name="onMobile ? 'transition-mobile' : '_'">
+    <Transition :name="onMobile ? 'transition-mobile' : '_'" mode="out-in">
       <header v-if="navExpanded">
         <a class="grid-logo dim-when-active" href="/"
           ><LogoComponent class="logo"></LogoComponent
@@ -118,7 +118,14 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
         </div>
       </header>
 
-      <header v-else class="expand" @click="navExpanded = true"></header>
+      <header v-else class="expand" @click="navExpanded = true">
+        <fa-icon
+          class="icon"
+          :icon="['fs', 'minus']"
+          :transform="{ rotate: -45 }"
+          size="lg"
+        ></fa-icon>
+      </header>
     </Transition>
   </Teleport>
 
@@ -177,9 +184,9 @@ footer {
     width: 10rem;
     grid-area: 1 / 1 / 2 / 3;
 
-	@media (max-width: 768px) {
-		justify-self: center;
-	}
+    @media (max-width: 768px) {
+      justify-self: center;
+    }
   }
 
   .links {
@@ -245,6 +252,7 @@ header {
   grid-template-rows: 1fr;
   grid-template-columns: 8.5rem 1fr 8.5rem;
   box-shadow: 0 1px 5px #333;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 
   @media (max-width: 768px) {
     height: 100vh;
@@ -421,6 +429,15 @@ header {
     width: 3rem;
     height: 3rem;
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
+
+    .icon {
+      position: fixed;
+      top: 0.5rem;
+      left: 0.5rem;
+      opacity: 1;
+    }
+
+    z-index: 11;
   }
 
   .grid-close {
@@ -433,24 +450,50 @@ header {
   }
 }
 
-.transition-mobile-enter-from,
-.transition-mobile-leave-to {
-  transform: translateX(-100%);
+header:not(.expand):is(.transition-mobile-enter-from, .transition-mobile-leave-to) {
+  clip-path: polygon(0% 0%, 6rem 0%, 0% 100%, 0% 100%);
+
+  > * {
+    opacity: 0;
+  }
 }
-.transition-mobile-enter-active,
-.transition-mobile-leave-active {
-  transition: transform 0.3s ease;
+
+header.expand:is(.transition-mobile-enter-from, .transition-mobile-leave-to) {
+  width: 6rem;
+  height: 100vh;
+
+  .icon {
+    opacity: 0;
+  }
 }
-.transition-mobile-enter-active {
-  transition-delay: 0.2s;
+
+header:not(.expand):is(.transition-mobile-enter-active, .transition-mobile-leave-active) {
+  transition:
+    transform 0.2s ease-out,
+    clip-path 0.2s ease-out;
+
+  > * {
+    transition: opacity 0.2s ease;
+  }
+}
+
+header.expand:is(.transition-mobile-enter-active, .transition-mobile-leave-active) {
+  transition:
+    width 0.2s ease-in,
+    height 0.2s ease-in;
+
+  .icon {
+    transition: opacity 0.2s ease;
+  }
 }
 
 .transition-vignette-enter-from,
 .transition-vignette-leave-to {
   opacity: 0;
 }
+
 .transition-vignette-enter-active,
 .transition-vignette-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
 }
 </style>
