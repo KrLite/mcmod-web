@@ -60,7 +60,7 @@
 
   @media (max-width: 768px) {
     --footer-height: 24rem;
-    --panorama-height: 24rem;
+    --panorama-height: 12rem;
   }
 }
 

@@ -3,16 +3,28 @@ import { onMounted, ref } from 'vue'
 
 // Fields
 const date = new Date()
+var translationTarget = 0
+
+// Reactives
+const panorama = ref<HTMLElement | null>(null)
+const img = ref<HTMLImageElement | null>(null)
 
 // Refs
-const image = ref({ type: 1, index: 1 })
+const imageSrc = ref({ type: 1, index: 1 })
 const translation = ref(0)
 
 // Hooks
 onMounted(() => {
-  image.value.type = getImageType(date)
-  image.value.index = getImageIndex(date)
+  imageSrc.value.type = getImageType(date)
+  imageSrc.value.index = getImageIndex(date)
 })
+
+function updateTranslation() {
+	translation.value += (translationTarget - translation.value) * 0.15
+
+	requestAnimationFrame(updateTranslation)
+}
+onMounted(() => requestAnimationFrame(updateTranslation))
 
 // Functions
 function getImageType(date: Date) {
@@ -35,14 +47,25 @@ function getImageIndex(date: Date) {
 }
 
 function onMouseMove(event: MouseEvent) {
-	
+  if (panorama.value && img.value) {
+    const panoramaRect = panorama.value.getBoundingClientRect()
+    const imgRect = img.value.getBoundingClientRect()
+    const x = event.clientX
+
+    const maxShift =
+      panoramaRect.width > imgRect.width ? 0 : Math.abs(panoramaRect.width - imgRect.width) / 2.0
+    const percentage = (x / panoramaRect.width) * 2 - 1
+
+    const shift = Math.min(maxShift, 25) * percentage
+    translationTarget = shift
+  }
 }
 </script>
 
 <template>
   <Teleport to="body">
-    <div class="panorama" @mousemove="onMouseMove">
-      <img :src="`panorama/${image.type}/${image.index}.jpg`" />
+    <div class="panorama" ref="panorama" @mousemove="onMouseMove">
+      <img ref="img" :src="`panorama/${imageSrc.type}/${imageSrc.index}.jpg`" />
     </div>
   </Teleport>
 </template>
@@ -56,8 +79,7 @@ function onMouseMove(event: MouseEvent) {
   > img {
     width: auto;
     height: 100%;
-    transform: translateX(v-bind('translation'));
-    transition: translation 0.3s ease;
+    transform: translateX(calc(v-bind('translation') * 1px));
   }
 }
 </style>
