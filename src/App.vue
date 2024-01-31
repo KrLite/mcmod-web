@@ -70,7 +70,7 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
           ><LogoComponent class="logo"></LogoComponent
         ></a>
 
-        <div class="grid-nav">
+        <div class="grid-nav scrollbar-invisible">
           <div class="nav dummy"></div>
           <div class="nav" v-for="nav in navs" :key="nav.path">
             <RouterLink :to="nav.path">

@@ -8,7 +8,7 @@ const index = computed(() => {
   const percentage = date.value.getHours() / 24.0 + date.value.getMinutes() / (60.0 * 24.0)
   return Math.floor(percentage * 64)
 })
-const time = computed(() => `${date.value.getHours()} : ${date.value.getMinutes()}`)
+const time = computed(() => `${date.value.getHours()} : ${date.value.getMinutes().toString().padStart(2, '0')}`)
 
 // Hooks
 function updateDate() {

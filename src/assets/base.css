@@ -106,3 +106,12 @@ body {
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
+
+.scrollbar-invisible {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.scrollbar-invisible::-webkit-scrollbar {
+	display: none;
+}

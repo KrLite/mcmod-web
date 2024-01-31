@@ -57,10 +57,12 @@ import IconWiki from './IconWiki.vue'
 .wiki {
   width: 100%;
   fill: var(--color-text);
+  transition: fill 0.5s ease;
 }
 
 .link {
   width: 100%;
   fill: var(--color-text);
+  transition: fill 0.5s ease;
 }
 </style>
