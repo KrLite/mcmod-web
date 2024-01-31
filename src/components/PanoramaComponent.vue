@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
+// Definitions
+const props = defineProps({
+  href: {
+    type: String,
+    default: undefined
+  },
+  target: {
+    type: String,
+    default: undefined
+  }
+})
+
 // Fields
 const date = new Date()
 var translationTarget = 0
@@ -20,9 +32,9 @@ onMounted(() => {
 })
 
 function updateTranslation() {
-	translation.value += (translationTarget - translation.value) * 0.15
+  translation.value += (translationTarget - translation.value) * 0.15
 
-	requestAnimationFrame(updateTranslation)
+  requestAnimationFrame(updateTranslation)
 }
 onMounted(() => requestAnimationFrame(updateTranslation))
 
@@ -64,9 +76,9 @@ function onMouseMove(event: MouseEvent) {
 
 <template>
   <Teleport to="body">
-    <div class="panorama" ref="panorama" @mousemove="onMouseMove">
+    <a :href="href" :target="target" class="panorama" ref="panorama" @mousemove="onMouseMove">
       <img ref="img" :src="`panorama/${imageSrc.type}/${imageSrc.index}.jpg`" />
-    </div>
+	</a>
   </Teleport>
 </template>
 

@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue';
-import { onMounted } from 'vue';
+import { useHead } from '@unhead/vue'
+import { onMounted } from 'vue'
 
-import PanoramaComponent from '@/components/PanoramaComponent.vue';
-
-
+import PanoramaComponent from '@/components/PanoramaComponent.vue'
 
 // Use Head
 onMounted(() => {
@@ -16,15 +14,18 @@ onMounted(() => {
 
 <template>
   <main>
-	<PanoramaComponent></PanoramaComponent>
-	<div class="long"></div>
+    <PanoramaComponent
+      href="https://space.bilibili.com/438147311/dynamic"
+      target="_blank"
+    ></PanoramaComponent>
+    <div class="long"></div>
   </main>
 </template>
 
 <style scoped>
 .long {
-	width: 100%;
-	height: 500vh;
-	border: 3px solid aqua;
+  width: 100%;
+  height: 500vh;
+  border: 3px solid aqua;
 }
 </style>
