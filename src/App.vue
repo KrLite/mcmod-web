@@ -17,6 +17,7 @@ const mediaQueryMobile = window.matchMedia('(max-width: 768px)')
 // Refs
 const onMobile = ref(mediaQueryMobile.matches)
 const navExpanded = ref(!onMobile.value)
+const loggedIn = ref(false)
 
 // Hooks
 function updateScreenWidth(event: UIEvent) {
@@ -34,7 +35,7 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
     <div class="background"></div>
 
     <Transition :name="onMobile ? 'transition-vignette' : '_'">
-      <div v-if="navExpanded" class="vignette"></div>
+      <div v-if="navExpanded" class="vignette" @click="navExpanded = false"></div>
     </Transition>
 
     <Transition :name="onMobile ? 'transition-mobile' : '_'">
@@ -54,11 +55,33 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
         </div>
 
         <div class="grid-footnote">
-          <a href="/" class="dim-when-active">
-            <fa-icon :icon="['fs', 'right-to-bracket']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
-          </a>
+          <span class="dim-when-active" @click="loggedIn = !loggedIn">
+            <fa-icon v-if="!loggedIn"
+              class="icon"
+              :icon="['fs', 'right-to-bracket']"
+              :size="onMobile ? '2x' : 'lg'"
+            ></fa-icon>
+            <fa-icon v-else
+              class="icon"
+              :icon="['fs', 'circle-user']"
+              :size="onMobile ? '2x' : 'lg'"
+            ></fa-icon>
+		  </span>
+
+          <span v-if="loggedIn" class="dim-when-active">
+            <fa-icon
+              class="icon"
+              :icon="['fs', 'envelope']"
+              :size="onMobile ? '2x' : 'lg'"
+            ></fa-icon>
+		  </span>
+
           <a href="https://github.com/KrLite/Web.mcmod.cn" class="dim-when-active">
-            <fa-icon :icon="['fab', 'github']" :size="onMobile ? '2x' : 'lg'"></fa-icon>
+            <fa-icon
+              class="icon"
+              :icon="['fab', 'github']"
+              :size="onMobile ? '2x' : 'lg'"
+            ></fa-icon>
           </a>
         </div>
 
@@ -89,7 +112,7 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
   height: 100%;
   background-color: var(--color-background);
   transition: all 0.5s ease;
-  z-index: -1;
+  z-index: -10;
 }
 
 .dim-when-active:active {
@@ -99,9 +122,7 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 
 footer {
   position: relative;
-  bottom: 0;
-  left: 0;
-  height: 16rem;
+  height: var(--footer-height);
   background: var(--color-background-soft);
   padding: 2rem 8.5rem 4rem 8.5rem;
 
@@ -110,6 +131,11 @@ footer {
     height: 100%;
     border: 3px solid yellow;
   }
+
+  @media (max-width: 768px) {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
 }
 
 header {
@@ -117,12 +143,22 @@ header {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 4rem;
+  height: var(--header-height);
   background: var(--mcmod-c-black);
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 8.5rem 1fr 8.5rem;
   box-shadow: 0 1px 5px #333;
+
+  @media (max-width: 768px) {
+    height: 100vh;
+    width: auto;
+    display: grid;
+    grid-template-columns: 8.5rem 1fr 8.5rem;
+    grid-template-rows: 8.5rem 1fr 5rem;
+  }
+
+  z-index: 10;
 }
 
 .grid-logo {
@@ -134,6 +170,11 @@ header {
   justify-content: flex-start;
   grid-column: 1;
   padding-left: 2rem;
+
+  @media (max-width: 768px) {
+    grid-row: 1;
+    grid-column: 1;
+  }
 }
 
 .grid-nav {
@@ -153,6 +194,21 @@ header {
     )
     100% 100% / 100% 100% repeat-y;
   mask: var(--mask);
+
+  @media (max-width: 768px) {
+    grid-row: 2;
+    grid-column: 1 / 4;
+    flex-direction: column;
+
+    --mask: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 1rem,
+        rgba(0, 0, 0, 1) calc(100% - 1rem),
+        rgba(0, 0, 0, 0) 100%
+      )
+      100% 100% / 100% 100% repeat-x;
+  }
 }
 
 .grid-footnote {
@@ -161,11 +217,20 @@ header {
   padding-right: 2rem;
   display: flex;
   flex-direction: row-reverse;
-  column-gap: 0.5rem;
+  column-gap: 0.75rem;
   align-items: center;
 
   a {
     color: var(--mcmod-color-white);
+  }
+
+  @media (max-width: 768px) {
+    padding-left: 2rem;
+    padding-right: 0;
+    grid-row: 3;
+    grid-column: 1 / 4;
+    flex-direction: row;
+    column-gap: 1.5rem;
   }
 }
 
@@ -178,11 +243,27 @@ header {
   min-width: 6rem;
   background-color: rgba(0, 0, 0, 0);
   transition: background-color 0.3s ease;
+
+  @media (max-width: 768px) {
+    min-width: none;
+    min-height: 5rem;
+    width: 100%;
+    height: auto;
+    padding: 0 2rem 0 2rem;
+    justify-content: flex-start;
+  }
 }
 
 .nav.dummy {
   min-width: 1rem;
   width: 1rem;
+
+  @media (max-width: 768px) {
+    min-width: none;
+    min-height: 1rem;
+    width: 100%;
+    height: 1rem;
+  }
 }
 
 .nav:not(.dummy):hover {
@@ -204,6 +285,14 @@ header {
     font-size: 1rem;
     color: var(--mcmod-c-white);
     text-decoration: none;
+
+    @media (max-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
   }
 }
 
@@ -215,20 +304,12 @@ header {
   font-weight: bolder;
 }
 
+.icon {
+  color: var(--mcmod-c-white);
+  user-select: none;
+}
+
 @media (max-width: 768px) {
-  footer {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-
-  header {
-    height: 100vh;
-    width: auto;
-    display: grid;
-    grid-template-columns: 8.5rem 1fr 8.5rem;
-    grid-template-rows: 8.5rem 1fr 5rem;
-  }
-
   .vignette {
     position: absolute;
     top: 0;
@@ -237,17 +318,13 @@ header {
     height: 100vh;
     background-color: black;
     opacity: 0.25;
+    z-index: 10;
   }
 
   .expand {
     width: 3rem;
     height: 3rem;
     clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
-  }
-
-  .grid-logo {
-    grid-row: 1;
-    grid-column: 1;
   }
 
   .grid-close {
@@ -257,58 +334,6 @@ header {
     align-items: center;
     justify-content: flex-end;
     padding-right: 2rem;
-
-    .icon {
-      color: var(--mcmod-c-white);
-    }
-  }
-
-  .grid-nav {
-    grid-row: 2;
-    grid-column: 1 / 4;
-    flex-direction: column;
-
-    --mask: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 1rem,
-        rgba(0, 0, 0, 1) calc(100% - 1rem),
-        rgba(0, 0, 0, 0) 100%
-      )
-      100% 100% / 100% 100% repeat-x;
-  }
-
-  .grid-footnote {
-    padding-left: 2rem;
-    padding-right: 0;
-    grid-row: 3;
-    grid-column: 1 / 4;
-    flex-direction: row;
-    column-gap: 1rem;
-  }
-
-  .nav {
-    min-width: none;
-    min-height: 5rem;
-    width: 100%;
-    height: auto;
-    padding: 0 2rem 0 2rem;
-    justify-content: flex-start;
-  }
-
-  .nav.dummy {
-    min-width: none;
-    min-height: 1rem;
-    width: 100%;
-    height: 1rem;
-  }
-
-  .nav a {
-    justify-content: flex-start;
-
-    p {
-      font-size: 1.5rem;
-    }
   }
 }
 

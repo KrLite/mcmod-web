@@ -32,7 +32,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import {
 	faArrowLeft,
-	faRightToBracket
+	faRightToBracket,
+	faCircleUser,
+	faEnvelope
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -42,7 +44,9 @@ import {
 library.add(
 	faArrowLeft,
 	faRightToBracket,
-	faGithub
+	faGithub,
+	faCircleUser,
+	faEnvelope
 )
 app.component('fa-icon', FontAwesomeIcon)
 

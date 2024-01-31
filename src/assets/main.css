@@ -1,18 +1,40 @@
 @import './base.css';
 @import './fonts.css';
 
-html, body, #app {
+html,
+body {
   min-width: 100vw;
   min-height: 100vh;
 }
 
-#app {
-  padding: 25rem 8.5rem 2.5rem 8.5rem;
-  transition: padding 0.2s ease;
+body {
+  display: grid;
+  grid-template-rows: var(--header-height) var(--panorama-height) 1fr var(--footer-height);
+
+  #app {
+    grid-row: 2 / 4;
+  }
+
+  footer {
+    grid-row: 4;
+  }
+
+  @media (max-width: 768px) {
+    #app {
+      grid-row: 1 / 4;
+    }
+
+    footer {
+      grid-row: 4;
+    }
+  }
 }
 
-@media (max-width: 768px) {
-  #app {
+#app {
+  padding: 2.5rem 8.5rem 2.5rem 8.5rem;
+  transition: padding 0.2s ease;
+
+  @media (max-width: 768px) {
     padding-left: 5%;
     padding-right: 5%;
   }

@@ -53,6 +53,17 @@
   }
 }
 
+:root {
+  --header-height: 4rem;
+  --footer-height: 16rem;
+  --panorama-height: 16rem;
+
+  @media (max-width: 768px) {
+    --footer-height: 24rem;
+    --panorama-height: 24rem;
+  }
+}
+
 *,
 *::before,
 *::after {

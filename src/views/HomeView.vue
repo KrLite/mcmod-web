@@ -2,6 +2,8 @@
 import { useHead } from '@unhead/vue';
 import { onMounted } from 'vue';
 
+import PanoramaComponent from '@/components/PanoramaComponent.vue';
+
 
 
 // Use Head
@@ -14,6 +16,7 @@ onMounted(() => {
 
 <template>
   <main>
+	<PanoramaComponent></PanoramaComponent>
 	<div class="long"></div>
   </main>
 </template>
