@@ -133,14 +133,15 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
         :key="index"
         :style="`--index: ${index + 1};`"
       >
-        <ul>
-          <p class="title">{{ links.name }}</p>
+        <p class="title">{{ links.name }}</p>
+
+        <div class="children">
           <p v-for="(link, index) in links.children" :key="index">
             <a class="link" :href="link.path">
               {{ link.name }}
             </a>
           </p>
-        </ul>
+        </div>
       </div>
     </footer>
   </Teleport>
@@ -169,17 +170,21 @@ footer {
   background: var(--color-background-soft);
   padding: 2rem 8.5rem 4rem 8.5rem;
   display: grid;
-  grid-template: 4rem 1fr / 10rem repeat(v-bind('footerLinks.length'), 1fr);
+  grid-template: 4rem 1fr / 10rem 2.5rem repeat(v-bind('footerLinks.length'), 1fr);
 
   .logo {
     height: 100%;
-    grid-area: 1 / 1 / 2 / 2;
-    border: 1px solid red;
+    width: 10rem;
+    grid-area: 1 / 1 / 2 / 3;
+
+	@media (max-width: 768px) {
+		justify-self: center;
+	}
   }
 
   .links {
     grid-row: 1 / 3;
-    grid-column: calc(var(--index) + 1);
+    grid-column: calc(var(--index) + 2);
 
     a,
     p {
@@ -191,6 +196,11 @@ footer {
       font-size: 1.2rem;
       font-weight: bolder;
       margin-bottom: 0.75em;
+
+      @media (max-width: 768px) {
+        grid-area: 1 / 1 / 2 / 2;
+        text-align: right;
+      }
     }
 
     .link {
@@ -201,11 +211,26 @@ footer {
     .link:hover {
       opacity: 0.8;
     }
+
+    @media (max-width: 768px) {
+      grid-row: calc(var(--index) + 2);
+      grid-column: 1 / 3;
+      padding-left: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 4rem;
+
+      .children {
+        grid-area: 1 / 2 / 2 / 3;
+      }
+    }
   }
 
   @media (max-width: 768px) {
+    padding-top: 5rem;
     padding-left: 5%;
     padding-right: 5%;
+    grid-template: 4rem 4rem repeat(v-bind('footerLinks.length'), 1fr) / auto;
   }
 }
 
