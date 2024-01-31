@@ -59,7 +59,7 @@
   --panorama-height: 16rem;
 
   @media (max-width: 768px) {
-    --footer-height: 24rem;
+    --footer-height: 75vh;
     --panorama-height: 12rem;
   }
 }

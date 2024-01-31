@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import LogoComponent from '@/components/logo/LogoComponent.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
+import LogoComponent from '@/components/logo/LogoComponent.vue'
+import LogoComponentAlt from './components/logo/LogoComponentAlt.vue'
 
 // Fields
+const mediaQueryMobile = window.matchMedia('(max-width: 768px)')
 const navs = [
   { path: '/', name: '主站' },
   { path: '/bbs', name: '社群' },
@@ -12,7 +14,31 @@ const navs = [
   { path: '/utility', name: '实用工具' },
   { path: '/feature', name: '特性' }
 ]
-const mediaQueryMobile = window.matchMedia('(max-width: 768px)')
+const footerLinks = [
+  {
+    name: '关于百科',
+    children: [
+      { path: '/', name: '百科帮助' },
+      { path: '/', name: '开发日志' },
+      { path: '/', name: '捐赠' }
+    ]
+  },
+  {
+    name: '关注百科',
+    children: [
+      { path: '/', name: '哔哩哔哩' },
+      { path: '/', name: '微博' }
+    ]
+  },
+  {
+    name: '联系百科',
+    children: [
+      { path: '/', name: '意见反馈' },
+      { path: '/', name: '电子邮件' },
+      { path: '/', name: '友链申请' }
+    ]
+  }
+]
 
 // Refs
 const onMobile = ref(mediaQueryMobile.matches)
@@ -56,17 +82,19 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 
         <div class="grid-footnote">
           <span class="dim-when-active" @click="loggedIn = !loggedIn">
-            <fa-icon v-if="!loggedIn"
+            <fa-icon
+              v-if="!loggedIn"
               class="icon"
               :icon="['fs', 'right-to-bracket']"
               :size="onMobile ? '2x' : 'lg'"
             ></fa-icon>
-            <fa-icon v-else
+            <fa-icon
+              v-else
               class="icon"
               :icon="['fs', 'circle-user']"
               :size="onMobile ? '2x' : 'lg'"
             ></fa-icon>
-		  </span>
+          </span>
 
           <span v-if="loggedIn" class="dim-when-active">
             <fa-icon
@@ -74,7 +102,7 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
               :icon="['fs', 'envelope']"
               :size="onMobile ? '2x' : 'lg'"
             ></fa-icon>
-		  </span>
+          </span>
 
           <a href="https://github.com/KrLite/Web.mcmod.cn" class="dim-when-active">
             <fa-icon
@@ -98,7 +126,22 @@ onUnmounted(() => window.removeEventListener('resize', updateScreenWidth))
 
   <Teleport to="body">
     <footer>
-      <div></div>
+      <LogoComponentAlt class="logo"></LogoComponentAlt>
+      <div
+        class="links"
+        v-for="(links, index) in footerLinks"
+        :key="index"
+        :style="`--index: ${index + 1};`"
+      >
+        <ul>
+          <p class="title">{{ links.name }}</p>
+          <p v-for="(link, index) in links.children" :key="index">
+            <a class="link" :href="link.path">
+              {{ link.name }}
+            </a>
+          </p>
+        </ul>
+      </div>
     </footer>
   </Teleport>
 </template>
@@ -125,11 +168,39 @@ footer {
   height: var(--footer-height);
   background: var(--color-background-soft);
   padding: 2rem 8.5rem 4rem 8.5rem;
+  display: grid;
+  grid-template: 4rem 1fr / 10rem repeat(v-bind('footerLinks.length'), 1fr);
 
-  div {
-    width: 100%;
+  .logo {
     height: 100%;
-    border: 3px solid yellow;
+    grid-area: 1 / 1 / 2 / 2;
+    border: 1px solid red;
+  }
+
+  .links {
+    grid-row: 1 / 3;
+    grid-column: calc(var(--index) + 1);
+
+    a,
+    p {
+      text-decoration: none;
+      color: var(--color-text);
+    }
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: bolder;
+      margin-bottom: 0.75em;
+    }
+
+    .link {
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+
+    .link:hover {
+      opacity: 0.8;
+    }
   }
 
   @media (max-width: 768px) {
