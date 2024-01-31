@@ -407,7 +407,7 @@ header {
 
 @media (max-width: 768px) {
   .vignette {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
